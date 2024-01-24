@@ -1,0 +1,14 @@
+{
+	"dependencies": {
+		"@allo-team/allo-v2-sdk": "^1.0.39",
+		"@superfluid-finance/sdk-core": "^0.6.12",
+		"ethers": "5.7.2",
+		"viem": "^2.0.5"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.6",
+		"dotenv": "^16.4.0",
+		"prettier": "^3.1.1",
+		"typescript": "^5.3.3"
+	}
+}
