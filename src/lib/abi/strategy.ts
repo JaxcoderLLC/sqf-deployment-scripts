@@ -465,7 +465,7 @@ export const strategyAbi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_previousFlowrate",
+        name: "_previousFlowRate",
         type: "uint256",
       },
       {
@@ -943,6 +943,19 @@ export const strategyAbi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "recipientSuperAppFactory",
+    outputs: [
+      {
+        internalType: "contract RecipientSuperAppFactory",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -1184,4 +1197,4 @@ export const strategyAbi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;

@@ -1,31 +1,28 @@
 import { ethers } from "ethers";
 import { parseEther } from "viem";
-import { optimismSepolia } from "viem/chains";
+import { optimism} from "viem/chains";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { SUPERFLUID_RESOLVER_ADDRESS } from "./lib/constants";
 import dotenv from "dotenv";
 dotenv.config();
 
-const amount = parseEther("0.001").toString();
-const signerPrivateKey = "0x";
+const amount = parseEther("0.02").toString();
 
 async function main() {
   const provider = new ethers.providers.JsonRpcProvider(
     process.env.RPC_URL,
-    optimismSepolia.id
+    optimism.id
   );
-  const wallet = new ethers.Wallet(signerPrivateKey, provider);
   const sfFramework = await Framework.create({
-    chainId: optimismSepolia.id,
+    chainId: optimism.id,
     resolverAddress: SUPERFLUID_RESOLVER_ADDRESS,
     provider,
   });
 
   const superToken = await sfFramework.loadNativeAssetSuperToken("ETHx");
   const op = superToken.upgrade({ amount });
-  const tx = await op.exec(wallet);
 
-  console.log(tx.hash);
+  console.log(await op.populateTransactionPromise);
 }
 
 main()

@@ -7,8 +7,7 @@ import {
   Address,
 } from "viem";
 import { SQFSuperFluidStrategy } from "@allo-team/allo-v2-sdk";
-import { optimismSepolia } from "viem/chains";
-import { privateKeyToAccount } from "viem/accounts";
+import { optimism } from "viem/chains";
 import { strategyAbi } from "./lib/abi/strategy";
 import {
   SQF_STRATEGY_ADDRESS,
@@ -18,35 +17,20 @@ import {
 import dotenv from "dotenv";
 dotenv.config();
 
-const amount = parseEther("0.000000027123287671"); // per second flow rate
-const poolManagerPrivateKey =
-  "0x";
+const amount = parseEther("0.000000007610350076"); // per second flow rate
 
 async function main() {
   const strategy = new SQFSuperFluidStrategy({
-    chain: optimismSepolia.id,
+    chain: optimism.id,
     rpc: process.env.RPC_URL,
     address: SQF_STRATEGY_ADDRESS,
     poolId: ALLO_POOL_ID,
   });
-  const walletClient = createWalletClient({
-    chain: optimismSepolia,
-    transport: http(process.env.RPC_URL),
-  });
-  const publicClient = createPublicClient({
-    chain: optimismSepolia,
-    transport: http(process.env.RPC_URL),
-  });
-  const account = privateKeyToAccount(poolManagerPrivateKey as Address);
 
   const distributeData = strategy.getDistributeData(amount);
-  const hash = await walletClient.sendTransaction({
-    account,
-    to: ALLO_CONTRACT_ADDRESS,
-    data: distributeData.data,
-  });
 
-  console.log(hash);
+  console.log("TO: ", ALLO_CONTRACT_ADDRESS);
+  console.log(distributeData.data);
 }
 
 main()
