@@ -21,10 +21,11 @@ import {
 import dotenv from "dotenv";
 dotenv.config();
 
-const poolManagerAddress = "0x8FC4308da9310479dF48ef77142Eef05c363e099"
+// pool admin profile id 0x5c98d8f8f09192c3b2f8ae590a9a1ff9d64dd21960f5eba6d26aca945cf9f906
+const poolManagerAddress = "0x3f15B8c6F9939879Cb030D6dd935348E57109637"
 const now = (Date.now() / 1000) | 0;
 const params = {
-  useRegistryAnchor: true,
+  useRegistryAnchor: false,
   metadataRequired: true,
   passportDecoder: PASSPORT_DECODER_ADDRESS as Address,
   superfluidHost: SUPERFLUID_HOST_ADDRESS as Address,

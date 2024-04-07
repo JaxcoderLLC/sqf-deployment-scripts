@@ -6,7 +6,7 @@ import {
   http,
   Address,
 } from "viem";
-import { SQFSuperFluidStrategy } from "@allo-team/allo-v2-sdk";
+import { SQFSuperFluidStrategy } from "@allo-team/allo-v2-sdk/dist";
 import { optimism } from "viem/chains";
 import { strategyAbi } from "./lib/abi/strategy";
 import {
@@ -24,7 +24,7 @@ async function main() {
     chain: optimism.id,
     rpc: process.env.RPC_URL,
     address: SQF_STRATEGY_ADDRESS,
-    poolId: ALLO_POOL_ID,
+    poolId: BigInt(ALLO_POOL_ID),
   });
 
   const distributeData = strategy.getDistributeData(amount);
