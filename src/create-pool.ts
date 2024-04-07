@@ -5,10 +5,10 @@ import {
   http,
   Address,
   parseAbiParameters,
-  encodeAbiParameters
+  encodeAbiParameters,
 } from "viem";
-import { SQFSuperFluidStrategy } from "@allo-team/allo-v2-sdk";
-import { optimism } from "viem/chains";
+import { SQFSuperFluidStrategy } from "@allo-team/allo-v2-sdk/dist";
+import { optimismSepolia } from "viem/chains";
 import {
   PASSPORT_DECODER_ADDRESS,
   SUPERFLUID_HOST_ADDRESS,
@@ -18,11 +18,12 @@ import {
   POOL_MANAGER_PROFILE_ID,
   RECIPIENT_SUPERAPP_FACTORY,
 } from "./lib/constants";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
+import { privateKeyToAccount } from "viem/accounts";
 dotenv.config();
 
 // pool admin profile id 0x5c98d8f8f09192c3b2f8ae590a9a1ff9d64dd21960f5eba6d26aca945cf9f906
-const poolManagerAddress = "0x3f15B8c6F9939879Cb030D6dd935348E57109637"
+const poolManagerAddress = "0x3f15B8c6F9939879Cb030D6dd935348E57109637";
 const now = (Date.now() / 1000) | 0;
 const params = {
   useRegistryAnchor: false,
@@ -42,29 +43,29 @@ const metadata = { protocol: BigInt(1), pointer: "ipfs://" };
 
 async function main() {
   const strategy = new SQFSuperFluidStrategy({
-    chain: optimism.id,
+    chain: optimismSepolia.id,
     rpc: process.env.RPC_URL,
   });
   const allo = await strategy.getAllo();
   const initData: `0x${string}` = encodeAbiParameters(
-      parseAbiParameters(
-        "bool, bool, address, address, address, address, uint64, uint64, uint64, uint64, uint256, uint256",
-      ),
-      [
-        params.useRegistryAnchor,
-        params.metadataRequired,
-        params.passportDecoder,
-        params.superfluidHost,
-        params.allocationSuperToken,
-        params.recipientSuperAppFactory,
-        params.registrationStartTime,
-        params.registrationEndTime,
-        params.allocationStartTime,
-        params.allocationEndTime,
-        params.minPassportScore,
-        params.initialSuperAppBalance,
-      ],
-    );
+    parseAbiParameters(
+      "bool, bool, address, address, address, address, uint64, uint64, uint64, uint64, uint256, uint256",
+    ),
+    [
+      params.useRegistryAnchor,
+      params.metadataRequired,
+      params.passportDecoder,
+      params.superfluidHost,
+      params.allocationSuperToken,
+      params.recipientSuperAppFactory,
+      params.registrationStartTime,
+      params.registrationEndTime,
+      params.allocationStartTime,
+      params.allocationEndTime,
+      params.minPassportScore,
+      params.initialSuperAppBalance,
+    ],
+  );
   const tx = allo.createPoolWithCustomStrategy({
     profileId: POOL_MANAGER_PROFILE_ID,
     strategy: SQF_STRATEGY_ADDRESS,
@@ -76,6 +77,21 @@ async function main() {
   });
 
   console.log(tx);
+
+  const walletClient = createWalletClient({
+    chain: optimismSepolia,
+    transport: http(process.env.RPC_URL),
+    account: privateKeyToAccount(
+      process.env.DEPLOYER_PRIVATE_KEY as `0x${string}`,
+    ),
+  });
+
+  const receipt = await walletClient.sendTransaction({
+    to: tx.to,
+    data: tx.data,
+  });
+
+  console.log(receipt);
 }
 
 main()
