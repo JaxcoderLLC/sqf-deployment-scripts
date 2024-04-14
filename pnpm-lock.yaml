@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@allo-team/allo-v2-sdk':
-    specifier: ^1.0.58
-    version: 1.0.58(@typechain/ethers-v6@0.5.1)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.3.3)
+    specifier: ^1.0.61
+    version: 1.0.61(@typechain/ethers-v6@0.5.1)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.3.3)
   '@superfluid-finance/sdk-core':
     specifier: ^0.6.12
     version: 0.6.12(@openzeppelin/test-helpers@0.5.16)(ethers@5.7.2)(graphql@16.8.1)(typescript@5.3.3)
@@ -35,8 +35,8 @@ packages:
     resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
     dev: false
 
-  /@allo-team/allo-v2-sdk@1.0.58(@typechain/ethers-v6@0.5.1)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.3.3):
-    resolution: {integrity: sha512-6yf0mwTLP7LG0mFQc3V+2YtJflH6K+9k22xOG9oW7+22rP0YrEEfqRLFVGTilBRyCa2Yn3WTy6BZzWSDqVzJxg==}
+  /@allo-team/allo-v2-sdk@1.0.61(@typechain/ethers-v6@0.5.1)(ethers@5.7.2)(typechain@8.3.2)(typescript@5.3.3):
+    resolution: {integrity: sha512-6feDh5Ld67+oJc3m+9JAtTwQ2eBRwY7xYTtqzSscd5lpKk5ksImVQoU00cH4cdd3hvIcPPH3GB6cM18MGCaAKg==}
     engines: {node: '>=16.15.0', npm: '>=8.5.5'}
     dependencies:
       '@typechain/hardhat': 9.1.0(@typechain/ethers-v6@0.5.1)(ethers@5.7.2)(hardhat@2.22.2)(typechain@8.3.2)

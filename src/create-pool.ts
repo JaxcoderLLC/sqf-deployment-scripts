@@ -34,9 +34,9 @@ const params = {
   recipientSuperAppFactory: RECIPIENT_SUPERAPP_FACTORY as Address,
   registrationStartTime: BigInt(now + 600),
   registrationEndTime: BigInt(now + 1200),
-  allocationStartTime: BigInt(1708448426),
-  allocationEndTime: BigInt(1713743999),
-  minPassportScore: BigInt(30000),
+  allocationStartTime: BigInt(new Date().getTime() / 1000 + 1200),
+  allocationEndTime: BigInt(new Date().getTime() / 1000 + 18000),
+  minPassportScore: BigInt(0),
   initialSuperAppBalance: parseEther("0.00000001"),
 };
 const metadata = { protocol: BigInt(1), pointer: "ipfs://" };
@@ -89,6 +89,7 @@ async function main() {
   const receipt = await walletClient.sendTransaction({
     to: tx.to,
     data: tx.data,
+    value: BigInt(tx.value),
   });
 
   console.log(receipt);

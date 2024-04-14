@@ -1,4 +1,6 @@
-export const registryAbi = [
+import { ContractAbi } from "../../types";
+
+export const registryAbi: ContractAbi = [
   { inputs: [], name: "ALLOCATION_ACTIVE", type: "error" },
   { inputs: [], name: "ALLOCATION_NOT_ACTIVE", type: "error" },
   { inputs: [], name: "ALLOCATION_NOT_ENDED", type: "error" },

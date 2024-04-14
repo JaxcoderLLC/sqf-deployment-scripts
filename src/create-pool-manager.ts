@@ -5,46 +5,68 @@ import {
   http,
   Address,
 } from "viem";
-import { SQFSuperFluidStrategy } from "@allo-team/allo-v2-sdk";
-import { optimism } from "viem/chains";
+import { CreateProfileArgs, Registry, SQFSuperFluidStrategy, TransactionData } from "@allo-team/allo-v2-sdk";
+import { base, optimism } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
 import { registryAbi } from "./lib/abi/registry";
 import { ALLO_REGISTRY_ADDRESS } from "./lib/constants";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
+import { sendTransaction } from "viem/_types/actions/wallet/sendTransaction";
+import { commonConfig } from "./common";
+import { publicClient } from "./wagmi";
+// import { getEventValues } from "./lib/utils";
+
 dotenv.config();
 
-const poolManagerAddress = "0x8FC4308da9310479dF48ef77142Eef05c363e099"
-const profile = {
-  name: "Pool Manager",
-  metadata: { protocol: BigInt(1), pointer: "ipfs://" },
-  members: [poolManagerAddress],
-};
+const registry = new Registry({
+  chain: base.id,
+  rpc: process.env.RPC_URL as string,
+});
 
 async function main() {
-  const publicClient = createPublicClient({
-    chain: optimism,
+  const walletClient = createWalletClient({
+    chain: base,
     transport: http(process.env.RPC_URL),
+    account: privateKeyToAccount(
+      process.env.DEPLOYER_PRIVATE_KEY as `0x${string}`,
+    ),
   });
 
-  const { name, metadata, members } = profile;
+  const createProfileArgs: CreateProfileArgs = {
+    nonce: BigInt(commonConfig.nonce),
+    name: commonConfig.profileName,
+    metadata: commonConfig.metadata,
+    owner: commonConfig.ownerAddress,
+    members: commonConfig.members,
+  };
 
-  const nonce = await publicClient.getTransactionCount({
-    address: poolManagerAddress,
-  });
-  const data = encodeFunctionData({
-    abi: registryAbi,
-    functionName: "createProfile",
-    args: [
-      BigInt(nonce),
-      name,
-      metadata,
-      poolManagerAddress,
-      members as Address[],
-    ],
+  console.log("Creating profile with args: ", createProfileArgs);
+
+  // create the transaction with the arguments -> type comes from SDK
+  // todo: snippet => createProfileTx
+  const txData: TransactionData = await registry.createProfile(
+    createProfileArgs
+  );
+
+  const txHash = await sendTransaction(walletClient, {
+    account: walletClient.account,
+    to: ALLO_REGISTRY_ADDRESS,
+    data: txData.data,
   });
 
-  console.log("TO: ", ALLO_REGISTRY_ADDRESS);
-  console.log(data);
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: txHash,
+    confirmations: 2,
+  });
+
+  console.log(receipt);
+
+  // const profileId =
+  //   getEventValues(receipt, registryAbi, "ProfileCreated").profileId || "0x";
+
+  // if (profileId === "0x") {
+  //   throw new Error("Profile creation failed");
+  // }
 }
 
 main()
